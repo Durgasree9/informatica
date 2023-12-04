@@ -1,0 +1,99 @@
+1. How will you get the return code for last executed command?
+Ans: $echo $?
+
+===============================================================================================================================================
+2. How to run a shell script in background(after initiating this script we may need to close the console or log off system)
+ $ nohup./script.sh &
+[1] 1876
+
+================================================================================================================================================
+3. We have transaction.dat(1000 BT Records) file which is extracted from transaction table and it contains RTGS, IMPS, NEFT and other transactions accordingly(column Description) .  Get the transaction wise record count as mentioned below:
+a.RTGS Transactions: <# of RTGS txn>
+b.IMPS Transactions: <# of IMPS txn>
+c.NEFT Transactions: <# of NEFT txn>
+d.Other Transactions: <# of transactions other than RTGS, IMPS and NEFT>
+Ans:
+
+$ grep -vc "RTGS\|NEFT\|IMPS" transaction.dat
+798
+
+a.Durgasree@LAPTOP-6816I2JM ~
+$ grep -c RTGS transaction.dat
+76
+
+b.Durgasree@LAPTOP-6816I2JM ~
+$ grep -c IMPS transaction.dat
+65
+
+c.Durgasree@LAPTOP-6816I2JM ~
+$ grep -c NEFT transaction.dat
+70
+
+d.$ grep -ic "RTGS\|NEFT\|IMPS" transaction.dat
+211
+====================================================================================================================================================
+4. numbers.dat
+1
+2
+3
+4
+5
+6
+7
+8
+9
+Get all data from numbers.dat and write them as a single line in numbers_new.dat(new file) file
+
+Ans: $ echo '1'$'\n''2'$'\n''3'$'\n''4'$'\n''5'$'\n''6'$'\n''7'$'\n''8'$'\n''9' > numbers.dat
+
+$ cat numbers.dat | tr -d '\n'
+
+$ cat numbers.dat | tr -d '\n' > numbers_new.dat
+=====================================================================================================================================================
+
+5.  Add below given header record into transaction.dat file as first line
+H,TxnReport, SelfService, 1.0,<report generation date in DD-MMM-YYYY, simply current date)
+
+Ans:
+
+$ sed "2i\H,TxnReport, SelfService, 1.0, $(date "+%F")"  transaction.dat
+
+=====================================================================================================================================================
+6. Add footer record into transaction.dat file which should be in below format.
+T, # of records from transaction.dat file after excluding header and column header record
+
+
+ANS: echo "T, $(tail -n +3 transaction.dat | wc -l) of records from transaction.dat file after excluding header and 
+column header record" >> transaction.dat  
+
+=====================================================================================================================================================
+7. Create a zero byte file named test.dat and update that file's modified time as 2022-09-30
+
+ANS: $ touch -d '2022-09-30 00:00:00' test.dat
+=====================================================================================================================================================
+8. Get the list of files which are having 777 permission and write them into file named data_leakage.dat
+
+ANS: $ ls -l | find / -type f -perm 0777
+/home/Durgasree/dummy.txt
+
+$ ls -l | find / -type f -perm 0777 >> data_leakage.dat
+
+=====================================================================================================================================================
+9. Create folder named test_folder and create few sub directories and along with files. 
+ Change permission with 751 to test_folder along with all of its subdirectories and files in single command.
+ 
+ Ans: $ mkdir -m 751 test_folder112 && cd test_folder112 && mkdir -m 751 subdir112 subdir221 && mkdir -m 751 touch file11.txt file22.txt
+
+=============================================================================================================================
+10. Take a backup of test.dat file with the name test.dat_bkp and ensure to have the same timestamp for bkp file as same as source file.
+$ touch test.dat
+
+Durgasree@LAPTOP-6816I2JM ~
+$ echo 'backup file for tst file' > test.dat
+
+Durgasree@LAPTOP-6816I2JM ~
+$ cat test.dat
+backup file for tst file
+
+Durgasree@LAPTOP-6816I2JM ~
+$ cp -p test.dat test.dat_bkp
